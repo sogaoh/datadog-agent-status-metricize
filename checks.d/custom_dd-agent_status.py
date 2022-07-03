@@ -22,7 +22,7 @@ class CustomStatusCheck(AgentCheck):
   OK = 0
   ERROR_EXIST = 2
   WARN_EXIST = 1
-  EXCEPTION_OCCUR = -1
+  EXCEPTION_OCCUR = 3
 
   pp = pprint.PrettyPrinter(indent=2)
 
