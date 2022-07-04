@@ -74,7 +74,7 @@ class CustomStatusCheck(AgentCheck):
             json.dump(ret, write_file)
 
 
-    def check(self):
+    def check(self, instance):
         """ check """
         self.get_status()
         self.put_summary()
