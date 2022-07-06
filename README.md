@@ -30,16 +30,3 @@ sudo -u dd-agent -- datadog-agent configcheck
 
 sudo -u dd-agent -- datadog-agent check custom_dd_agent_status
 ```
-
-
-## Note 
-
-### How to `single` script run
-
-```
-cd /path/to/datadog-agent-status-metricize
-sudo chown -R dd-agent:dd-agent single
-cd single
-
-sudo -u dd-agent python3 custom_dd_agent_status.py
-```
