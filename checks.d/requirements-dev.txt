@@ -1,0 +1,8 @@
+datadog-checks-base
+datadog-checks-dev[cli]
+requests_unixsocket
+binary
+prometheus_client
+pylint
+flake8
+autopep8

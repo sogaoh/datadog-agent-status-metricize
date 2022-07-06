@@ -11,33 +11,39 @@ except ImportError:
 
 import os
 import json
-import pprint
+
+from datadog_checks.base.utils.subprocess_output import get_subprocess_output
 
 # 特別な変数 __version__ の内容は Agent のステータスページに表示されます
 __version__ = "1.0.0"
 
+
 class CustomStatusCheck(AgentCheck):
     """ CustomStatusCheck """
-    STATUS_FILE = "/etc/datadog-agent/checks.d/dd-agent_status.json"
-    SUMMARY_FILE = "/etc/datadog-agent/checks.d/dd-agent_status_summary.json"
-
     OK = 0
     ERROR_EXIST = 2
     WARN_EXIST = 1
     EXCEPTION_OCCUR = 3
 
-    pp = pprint.PrettyPrinter(indent=2)
+    DEBUG = True if os.getenv("DEBUG", "") and os.getenv("DEBUG", "").lower() not in ("n", "no", "0") else False
 
     def get_status(self):
         """ get_status """
-        os.system("rm -f " + self.STATUS_FILE)
-        os.system("datadog-agent status -j > " + self.STATUS_FILE)
+        out, err, retcode = get_subprocess_output(
+            ["datadog-agent", "status", "-j"],
+            self.log,
+            raise_on_empty_output=True,
+        )
+        if err != "":
+            print((out, err, retcode))
+        if self.DEBUG:
+            print("DEBUG: status={}".format(out))
 
-    def put_summary(self):
+        status = json.loads(out)
+        return status
+
+    def put_summary(self, agent_status_data):
         """ put_summary """
-        with open(self.STATUS_FILE, "r", encoding="utf-8") as read_file:
-            agent_status_data = json.load(read_file)
-
         ret = {}
         ret["check_status"] = self.OK
         errors = []
@@ -52,14 +58,14 @@ class CustomStatusCheck(AgentCheck):
                             if value > 0:
                                 ret["check_status"] = self.ERROR_EXIST
                                 errors.append({
-                                    check_name + "#" + check_id:check_values["LastError"]
+                                    check_name + "#" + check_id: check_values["LastError"]
                                 })
                         elif key == "TotalWarnings":
                             if value > 0:
                                 if ret["check_status"] != self.ERROR_EXIST:
                                     ret["check_status"] = self.WARN_EXIST
                                 warnings.append({
-                                    check_name + "#" + check_id:check_values["LastWarnings"]
+                                    check_name + "#" + check_id: check_values["LastWarnings"]
                                 })
             ret["errors"] = errors
             ret["warnings"] = warnings
@@ -67,19 +73,13 @@ class CustomStatusCheck(AgentCheck):
             ret["check_status"] = self.EXCEPTION_OCCUR
             ret["exceptions"] = repr(ex_key)
 
-        #pp.pprint(ret)
-
-        os.system("rm -f " + self.SUMMARY_FILE)
-        with open(self.SUMMARY_FILE, "w", encoding="utf-8") as write_file:
-            json.dump(ret, write_file)
-
+        if self.DEBUG:
+            print("DEBUG: summary={}".format(ret))
+        return ret
 
     def check(self, instance):
         """ check """
-        self.get_status()
-        self.put_summary()
-
-        with open(self.SUMMARY_FILE, "r", encoding="utf-8") as read_file:
-            status_summary_data = json.load(read_file)
+        agent_status_data = self.get_status()
+        status_summary_data = self.put_summary(agent_status_data)
 
         self.gauge("custom_dd_agent_check.status_value", status_summary_data["check_status"])
