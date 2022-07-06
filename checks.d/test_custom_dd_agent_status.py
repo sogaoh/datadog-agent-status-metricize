@@ -10,6 +10,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns ok """
         self.assertEqual(
             CustomStatusCheck().put_summary({
+                "apmStats": {
+                    "config": {
+                        "Hostname": "test-server"
+                    }
+                },
                 "runnerStats": {
                     "Checks": {
                         "cpu": {
@@ -42,6 +47,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns warning variation """
         self.assertEqual(
             CustomStatusCheck().put_summary({
+                "apmStats": {
+                    "config": {
+                        "Hostname": "test-server"
+                    }
+                },
                 "runnerStats": {
                     "Checks": {
                         "cpu": {
@@ -66,7 +76,11 @@ class TestCustomStatusCheck(TestCase):
             {
                 "check_status": 1,
                 "warnings": [
-                    {"cpu#cpu": ["cpu last warning"]},
+                    {
+                        "item": "cpu",
+                        "identifier": "cpu",
+                        "last_warnings": ["cpu last warning"]
+                    },
                 ],
                 "errors": [],
             },
@@ -76,6 +90,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns warning variation """
         self.assertEqual(
             CustomStatusCheck().put_summary({
+                "apmStats": {
+                    "config": {
+                        "Hostname": "test-server"
+                    }
+                },
                 "runnerStats": {
                     "Checks": {
                         "cpu": {
@@ -100,7 +119,11 @@ class TestCustomStatusCheck(TestCase):
             {
                 "check_status": 1,
                 "warnings": [
-                    {"disk#disk:dddddddddddddddd": ["disk last warning"]},
+                    {
+                        "item": "disk",
+                        "identifier": "disk:dddddddddddddddd",
+                        "last_warnings": ["disk last warning"]
+                    },
                 ],
                 "errors": [],
             },
@@ -110,6 +133,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns warning variation """
         self.assertEqual(
             CustomStatusCheck().put_summary({
+                "apmStats": {
+                    "config": {
+                        "Hostname": "test-server"
+                    }
+                },
                 "runnerStats": {
                     "Checks": {
                         "cpu": {
@@ -134,8 +162,16 @@ class TestCustomStatusCheck(TestCase):
             {
                 "check_status": 1,
                 "warnings": [
-                    {"cpu#cpu": ["cpu last warning"]},
-                    {"disk#disk:dddddddddddddddd": ["disk last warning"]},
+                    {
+                        "item": "cpu",
+                        "identifier": "cpu",
+                        "last_warnings": ["cpu last warning"]
+                    },
+                    {
+                        "item": "disk",
+                        "identifier": "disk:dddddddddddddddd",
+                        "last_warnings": ["disk last warning"]
+                    },
                 ],
                 "errors": [],
             },
@@ -145,6 +181,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns warning variation """
         self.assertEqual(
             CustomStatusCheck().put_summary({
+                "apmStats": {
+                    "config": {
+                        "Hostname": "test-server"
+                    }
+                },
                 "runnerStats": {
                     "Checks": {
                         "cpu": {
@@ -169,8 +210,16 @@ class TestCustomStatusCheck(TestCase):
             {
                 "check_status": 1,
                 "warnings": [
-                    {"cpu#cpu": ["cpu last warning"]},
-                    {"disk#disk:dddddddddddddddd": ["disk last warning 1", "disk last warning 2"]},
+                    {
+                        "item": "cpu",
+                        "identifier": "cpu",
+                        "last_warnings": ["cpu last warning"]
+                    },
+                    {
+                        "item": "disk",
+                        "identifier": "disk:dddddddddddddddd",
+                        "last_warnings":  ["disk last warning 1", "disk last warning 2"]
+                    },
                 ],
                 "errors": [],
             },
@@ -180,6 +229,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns error variation """
         self.assertEqual(
             CustomStatusCheck().put_summary({
+                "apmStats": {
+                    "config": {
+                        "Hostname": "test-server"
+                    }
+                },
                 "runnerStats": {
                     "Checks": {
                         "cpu": {
@@ -205,7 +259,11 @@ class TestCustomStatusCheck(TestCase):
                 "check_status": 2,
                 "warnings": [],
                 "errors": [
-                    {"cpu#cpu": "cpu last error"},
+                    {
+                        "item": "cpu",
+                        "identifier": "cpu",
+                        "last_error": "cpu last error"
+                    },
                 ],
             },
         )
@@ -214,6 +272,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns error variation """
         self.assertEqual(
             CustomStatusCheck().put_summary({
+                "apmStats": {
+                    "config": {
+                        "Hostname": "test-server"
+                    }
+                },
                 "runnerStats": {
                     "Checks": {
                         "cpu": {
@@ -239,7 +302,11 @@ class TestCustomStatusCheck(TestCase):
                 "check_status": 2,
                 "warnings": [],
                 "errors": [
-                    {"disk#disk:dddddddddddddddd": "disk last error"},
+                    {
+                        "item": "disk",
+                        "identifier": "disk:dddddddddddddddd",
+                        "last_error": "disk last error"
+                    },
                 ],
             },
         )
@@ -248,6 +315,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns error variation """
         self.assertEqual(
             CustomStatusCheck().put_summary({
+                "apmStats": {
+                    "config": {
+                        "Hostname": "test-server"
+                    }
+                },
                 "runnerStats": {
                     "Checks": {
                         "cpu": {
@@ -272,10 +344,18 @@ class TestCustomStatusCheck(TestCase):
             {
                 "check_status": 2,
                 "warnings": [
-                    {"cpu#cpu": ["cpu last warning"]},
+                    {
+                        "item": "cpu",
+                        "identifier": "cpu",
+                        "last_warnings": ["cpu last warning"]
+                    },
                 ],
                 "errors": [
-                    {"disk#disk:dddddddddddddddd": "disk last error"},
+                    {
+                        "item": "disk",
+                        "identifier": "disk:dddddddddddddddd",
+                        "last_error": "disk last error"
+                    },
                 ],
             },
         )
@@ -284,6 +364,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns error variation """
         self.assertEqual(
             CustomStatusCheck().put_summary({
+                "apmStats": {
+                    "config": {
+                        "Hostname": "test-server"
+                    }
+                },
                 "runnerStats": {
                     "Checks": {
                         "cpu": {
@@ -308,10 +393,18 @@ class TestCustomStatusCheck(TestCase):
             {
                 "check_status": 2,
                 "warnings": [
-                    {"cpu#cpu": ["cpu last warning"]},
+                    {
+                        "item": "cpu",
+                        "identifier": "cpu",
+                        "last_warnings": ["cpu last warning"]
+                    },
                 ],
                 "errors": [
-                    {"cpu#cpu": "cpu last error"},
+                    {
+                        "item": "cpu",
+                        "identifier": "cpu",
+                        "last_error": "cpu last error"
+                    },
                 ],
             },
         )
@@ -320,6 +413,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns exception """
         self.assertEqual(
             CustomStatusCheck().put_summary({
+                "apmStats": {
+                    "config": {
+                        "Hostname": "test-server"
+                    }
+                },
                 "runnerStats": {
                     "Checks": {
                         "cpu": {
@@ -343,6 +441,6 @@ class TestCustomStatusCheck(TestCase):
             }),
             {
                 "check_status": 3,
-                "exceptions": "KeyError('LastWarnings')",
+                "exception": "KeyError('LastWarnings')",
             },
         )

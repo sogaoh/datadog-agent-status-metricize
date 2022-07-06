@@ -1,4 +1,4 @@
-**/dd-agent_status*.json
+**/*.json
 .venv
 *.pyc
 *.pyo
