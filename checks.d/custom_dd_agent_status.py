@@ -11,6 +11,7 @@ except ImportError:
 
 import os
 import json
+import time
 
 from datadog_checks.base.utils.subprocess_output import get_subprocess_output
 
@@ -52,9 +53,10 @@ class CustomStatusCheck(AgentCheck):
         errors = []
         warnings = []
 
-        host = agent_status_data["apmStats"]["config"]["Hostname"]
-
         try:
+            host = agent_status_data["apmStats"]["config"]["Hostname"]
+            ret["host_name"] = host
+
             checks = agent_status_data["runnerStats"]["Checks"]
             for check_name, check_results in checks.items():
                 for check_id, check_values in check_results.items():
@@ -86,12 +88,55 @@ class CustomStatusCheck(AgentCheck):
             print(f"DEBUG: summary={ret}")
         return ret
 
+    def get_items(self, summary_data):
+        """ get_items """
+        ret = []
+        for key, values in summary_data.items():
+            for val in values:
+                for k, v in val.items():
+                    if k == "item":
+                        ret.append(v)
+        if self.DEBUG:
+            print(f"DEBUG: items={ret}")
+        return ret
+
     def check(self, instance):
         """ check """
         agent_status_data = self.get_status()
         status_summary_data = self.put_summary(agent_status_data)
 
+        status = status_summary_data["check_status"]
+        host = status_summary_data["host_name"]
+        # if status == self.ERROR_EXIST:
+        #     error_items = self.get_items(status_summary_data["errors"])
+        #     for error_item in error_items:
+        #         self.gauge(
+        #             "custom_dd_agent_check.status_value",
+        #             status,
+        #             tags=[f"level:{status}", f"item:{error_item}"] + self.instance.get('tags', []),
+        #             hostname=host
+        #         )
+        #         time.sleep(5)
+        # elif status == self.WARN_EXIST:
+        #     warning_items = self.get_items(status_summary_data["warnings"])
+        #     for warn_item in warning_items:
+        #         self.gauge(
+        #             "custom_dd_agent_check.status_value",
+        #             status,
+        #             tags=[f"level:{status}", f"item:{warn_item}"] + self.instance.get('tags', []),
+        #             hostname=host
+        #         )
+        #         time.sleep(5)
+        # else:   # OK,EXCEPTION_OCCUR
+        #     self.gauge(
+        #         "custom_dd_agent_check.status_value",
+        #         status,
+        #         tags=[f"level:{status}"] + self.instance.get('tags', []),
+        #         hostname=host
+        #     )
         self.gauge(
             "custom_dd_agent_check.status_value",
-            status_summary_data["check_status"]
+            status,
+            tags=[f"level:{status}"] + self.instance.get('tags', []),
+            hostname=host
         )
