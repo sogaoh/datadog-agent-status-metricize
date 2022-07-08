@@ -37,10 +37,9 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "check_status": 0,
+                "max": 0,
                 "host_name": "test-server",
-                "warnings": [],
-                "errors": [],
+                "alerts": [],
             },
         )
 
@@ -75,16 +74,16 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "check_status": 1,
+                "max": 1,
                 "host_name": "test-server",
-                "warnings": [
+                "alerts": [
                     {
+                        "level": 1,
                         "item": "cpu",
                         "identifier": "cpu",
-                        "last_warnings": ["cpu last warning"]
+                        "details": ["cpu last warning"]
                     },
                 ],
-                "errors": [],
             },
         )
 
@@ -119,16 +118,16 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "check_status": 1,
+                "max": 1,
                 "host_name": "test-server",
-                "warnings": [
+                "alerts": [
                     {
+                        "level": 1,
                         "item": "disk",
                         "identifier": "disk:dddddddddddddddd",
-                        "last_warnings": ["disk last warning"]
+                        "details": ["disk last warning"]
                     },
                 ],
-                "errors": [],
             },
         )
 
@@ -163,21 +162,22 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "check_status": 1,
+                "max": 1,
                 "host_name": "test-server",
-                "warnings": [
+                "alerts": [
                     {
+                        "level": 1,
                         "item": "cpu",
                         "identifier": "cpu",
-                        "last_warnings": ["cpu last warning"]
+                        "details": ["cpu last warning"]
                     },
                     {
+                        "level": 1,
                         "item": "disk",
                         "identifier": "disk:dddddddddddddddd",
-                        "last_warnings": ["disk last warning"]
+                        "details": ["disk last warning"]
                     },
                 ],
-                "errors": [],
             },
         )
 
@@ -212,21 +212,22 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "check_status": 1,
+                "max": 1,
                 "host_name": "test-server",
-                "warnings": [
+                "alerts": [
                     {
+                        "level": 1,
                         "item": "cpu",
                         "identifier": "cpu",
-                        "last_warnings": ["cpu last warning"]
+                        "details": ["cpu last warning"]
                     },
                     {
+                        "level": 1,
                         "item": "disk",
                         "identifier": "disk:dddddddddddddddd",
-                        "last_warnings":  ["disk last warning 1", "disk last warning 2"]
+                        "details":  ["disk last warning 1", "disk last warning 2"]
                     },
                 ],
-                "errors": [],
             },
         )
 
@@ -261,14 +262,14 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "check_status": 2,
+                "max": 2,
                 "host_name": "test-server",
-                "warnings": [],
-                "errors": [
+                "alerts": [
                     {
+                        "level": 2,
                         "item": "cpu",
                         "identifier": "cpu",
-                        "last_error": "cpu last error"
+                        "details": "cpu last error"
                     },
                 ],
             },
@@ -305,14 +306,14 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "check_status": 2,
+                "max": 2,
                 "host_name": "test-server",
-                "warnings": [],
-                "errors": [
+                "alerts": [
                     {
+                        "level": 2,
                         "item": "disk",
                         "identifier": "disk:dddddddddddddddd",
-                        "last_error": "disk last error"
+                        "details": "disk last error"
                     },
                 ],
             },
@@ -349,20 +350,20 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "check_status": 2,
+                "max": 2,
                 "host_name": "test-server",
-                "warnings": [
+                "alerts": [
                     {
+                        "level": 1,
                         "item": "cpu",
                         "identifier": "cpu",
-                        "last_warnings": ["cpu last warning"]
+                        "details": ["cpu last warning"]
                     },
-                ],
-                "errors": [
                     {
+                        "level": 2,
                         "item": "disk",
                         "identifier": "disk:dddddddddddddddd",
-                        "last_error": "disk last error"
+                        "details": "disk last error"
                     },
                 ],
             },
@@ -399,20 +400,20 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "check_status": 2,
+                "max": 2,
                 "host_name": "test-server",
-                "warnings": [
+                "alerts": [
                     {
+                        "level": 2,
                         "item": "cpu",
                         "identifier": "cpu",
-                        "last_warnings": ["cpu last warning"]
+                        "details": "cpu last error"
                     },
-                ],
-                "errors": [
                     {
+                        "level": 1,
                         "item": "cpu",
                         "identifier": "cpu",
-                        "last_error": "cpu last error"
+                        "details": ["cpu last warning"]
                     },
                 ],
             },
@@ -449,30 +450,37 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "check_status": 3,
+                "max": 3,
                 "host_name": "test-server",
-                "exception": "KeyError('LastWarnings')",
+                "alerts": [
+                    {
+                        "level": 3,
+                        "item": "",
+                        "identifier": "",
+                        "details": "KeyError('LastWarnings')"
+                    },
+                ]
             },
         )
 
-    def test_get_items(self):
-        """ test get items """
-        self.assertEqual(
-            CustomStatusCheck().get_items({
-                "warnings": [
-                    {
-                        "item": "cpu",
-                        "identifier": "cpu",
-                        "last_warnings": ["cpu last warning"]
-                    },
-                    {
-                        "item": "disk",
-                        "identifier": "disk:dddddddddddddddd",
-                        "last_warnings": ["disk last warning"]
-                    },
-                ]
-            }),
-            [
-                "cpu", "disk"
-            ]
-        )
+    # def test_get_items(self):
+    #     """ test get items """
+    #     self.assertEqual(
+    #         CustomStatusCheck().get_items({
+    #             "warnings": [
+    #                 {
+    #                     "item": "cpu",
+    #                     "identifier": "cpu",
+    #                     "last_warnings": ["cpu last warning"]
+    #                 },
+    #                 {
+    #                     "item": "disk",
+    #                     "identifier": "disk:dddddddddddddddd",
+    #                     "last_warnings": ["disk last warning"]
+    #                 },
+    #             ]
+    #         }),
+    #         [
+    #             "cpu", "disk"
+    #         ]
+    #     )

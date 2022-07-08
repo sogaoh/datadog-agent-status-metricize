@@ -49,9 +49,8 @@ class CustomStatusCheck(AgentCheck):
     def put_summary(self, agent_status_data):
         """ put_summary """
         ret = {}
-        ret["check_status"] = self.OK
-        errors = []
-        warnings = []
+        ret["max"] = self.OK
+        alerts = []
 
         try:
             host = agent_status_data["apmStats"]["config"]["Hostname"]
@@ -63,41 +62,36 @@ class CustomStatusCheck(AgentCheck):
                     for key, value in check_values.items():
                         if key == "TotalErrors":
                             if value > 0:
-                                ret["check_status"] = self.ERROR_EXIST
-                                errors.append({
+                                ret["max"] = self.ERROR_EXIST
+                                alerts.append({
+                                    "level": self.ERROR_EXIST,
                                     "item": check_name,
                                     "identifier": check_id,
-                                    "last_error": check_values["LastError"]
+                                    "details": check_values["LastError"]
                                 })
                         elif key == "TotalWarnings":
                             if value > 0:
-                                if ret["check_status"] != self.ERROR_EXIST:
-                                    ret["check_status"] = self.WARN_EXIST
-                                warnings.append({
+                                if ret["max"] != self.ERROR_EXIST:
+                                    ret["max"] = self.WARN_EXIST
+                                alerts.append({
+                                    "level": self.WARN_EXIST,
                                     "item": check_name,
                                     "identifier": check_id,
-                                    "last_warnings": check_values["LastWarnings"]
+                                    "details": check_values["LastWarnings"]
                                 })
-            ret["errors"] = errors
-            ret["warnings"] = warnings
         except KeyError as ex_key:
-            ret["check_status"] = self.EXCEPTION_OCCUR
-            ret["exception"] = repr(ex_key)
+            ret["max"] = self.EXCEPTION_OCCUR
+            alerts.append({
+                "level": self.EXCEPTION_OCCUR,
+                "item": "",
+                "identifier": "",
+                "details": repr(ex_key)
+            })
+        finally:
+            ret["alerts"] = alerts
 
         if self.DEBUG:
             print(f"DEBUG: summary={ret}")
-        return ret
-
-    def get_items(self, summary_data):
-        """ get_items """
-        ret = []
-        for key, values in summary_data.items():
-            for val in values:
-                for k, v in val.items():
-                    if k == "item":
-                        ret.append(v)
-        if self.DEBUG:
-            print(f"DEBUG: items={ret}")
         return ret
 
     def check(self, instance):
@@ -105,38 +99,17 @@ class CustomStatusCheck(AgentCheck):
         agent_status_data = self.get_status()
         status_summary_data = self.put_summary(agent_status_data)
 
-        status = status_summary_data["check_status"]
         host = status_summary_data["host_name"]
-        # if status == self.ERROR_EXIST:
-        #     error_items = self.get_items(status_summary_data["errors"])
-        #     for error_item in error_items:
-        #         self.gauge(
-        #             "custom_dd_agent_check.status_value",
-        #             status,
-        #             tags=[f"level:{status}", f"item:{error_item}"] + self.instance.get('tags', []),
-        #             hostname=host
-        #         )
-        #         time.sleep(5)
-        # elif status == self.WARN_EXIST:
-        #     warning_items = self.get_items(status_summary_data["warnings"])
-        #     for warn_item in warning_items:
-        #         self.gauge(
-        #             "custom_dd_agent_check.status_value",
-        #             status,
-        #             tags=[f"level:{status}", f"item:{warn_item}"] + self.instance.get('tags', []),
-        #             hostname=host
-        #         )
-        #         time.sleep(5)
-        # else:   # OK,EXCEPTION_OCCUR
-        #     self.gauge(
-        #         "custom_dd_agent_check.status_value",
-        #         status,
-        #         tags=[f"level:{status}"] + self.instance.get('tags', []),
-        #         hostname=host
-        #     )
         self.gauge(
-            "custom_dd_agent_check.status_value",
-            status,
-            tags=[f"level:{status}"] + self.instance.get('tags', []),
+            "custom_dd_agent_check.alerts.max",
+            status_summary_data["max"],
+            tags=[] + self.instance.get('tags', []),
+            hostname=host
+        )
+        alerts_count = len(status_summary_data["alerts"])
+        self.count(
+            "custom_dd_agent_check.alerts.count",
+            alerts_count,
+            tags=[] + self.instance.get('tags', []),
             hostname=host
         )
