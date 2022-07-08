@@ -36,11 +36,22 @@ class TestCustomStatusCheck(TestCase):
                     }
                 }
             }),
-            {
-                "max": 0,
-                "host_name": "test-server",
-                "alerts": [],
-            },
+            [
+                {
+                    "name": "cpu",
+                    "identifier": "cpu",
+                    "host_name": "test-server",
+                    "status": 0,
+                    "details": {},
+                },
+                {
+                    "name": "disk",
+                    "identifier": "disk:dddddddddddddddd",
+                    "host_name": "test-server",
+                    "status": 0,
+                    "details": {},
+                },
+            ],
         )
 
     def test_put_summary_warning1(self):
@@ -73,18 +84,24 @@ class TestCustomStatusCheck(TestCase):
                     }
                 }
             }),
-            {
-                "max": 1,
-                "host_name": "test-server",
-                "alerts": [
-                    {
-                        "level": 1,
-                        "item": "cpu",
-                        "identifier": "cpu",
-                        "details": ["cpu last warning"]
-                    },
-                ],
-            },
+            [
+                {
+                    "name": "cpu",
+                    "identifier": "cpu",
+                    "host_name": "test-server",
+                    "status": 1,
+                    "details": {
+                        "warnings": ["cpu last warning"],
+                    }
+                },
+                {
+                    "name": "disk",
+                    "identifier": "disk:dddddddddddddddd",
+                    "host_name": "test-server",
+                    "status": 0,
+                    "details": {},
+                },
+            ]
         )
 
     def test_put_summary_warning2(self):
@@ -117,18 +134,24 @@ class TestCustomStatusCheck(TestCase):
                     }
                 }
             }),
-            {
-                "max": 1,
-                "host_name": "test-server",
-                "alerts": [
-                    {
-                        "level": 1,
-                        "item": "disk",
-                        "identifier": "disk:dddddddddddddddd",
-                        "details": ["disk last warning"]
-                    },
-                ],
-            },
+            [
+                {
+                    "name": "cpu",
+                    "identifier": "cpu",
+                    "host_name": "test-server",
+                    "status": 0,
+                    "details": {},
+                },
+                {
+                    "name": "disk",
+                    "identifier": "disk:dddddddddddddddd",
+                    "host_name": "test-server",
+                    "status": 1,
+                    "details": {
+                        "warnings": ["disk last warning"],
+                    }
+                },
+            ]
         )
 
     def test_put_summary_warning3(self):
@@ -161,24 +184,26 @@ class TestCustomStatusCheck(TestCase):
                     }
                 }
             }),
-            {
-                "max": 1,
-                "host_name": "test-server",
-                "alerts": [
-                    {
-                        "level": 1,
-                        "item": "cpu",
-                        "identifier": "cpu",
-                        "details": ["cpu last warning"]
-                    },
-                    {
-                        "level": 1,
-                        "item": "disk",
-                        "identifier": "disk:dddddddddddddddd",
-                        "details": ["disk last warning"]
-                    },
-                ],
-            },
+            [
+                {
+                    "name": "cpu",
+                    "identifier": "cpu",
+                    "host_name": "test-server",
+                    "status": 1,
+                    "details": {
+                        "warnings": ["cpu last warning"],
+                    }
+                },
+                {
+                    "name": "disk",
+                    "identifier": "disk:dddddddddddddddd",
+                    "host_name": "test-server",
+                    "status": 1,
+                    "details": {
+                        "warnings": ["disk last warning"],
+                    }
+                },
+            ]
         )
 
     def test_put_summary_warning4(self):
@@ -211,24 +236,26 @@ class TestCustomStatusCheck(TestCase):
                     }
                 }
             }),
-            {
-                "max": 1,
-                "host_name": "test-server",
-                "alerts": [
-                    {
-                        "level": 1,
-                        "item": "cpu",
-                        "identifier": "cpu",
-                        "details": ["cpu last warning"]
-                    },
-                    {
-                        "level": 1,
-                        "item": "disk",
-                        "identifier": "disk:dddddddddddddddd",
-                        "details":  ["disk last warning 1", "disk last warning 2"]
-                    },
-                ],
-            },
+            [
+                {
+                    "name": "cpu",
+                    "identifier": "cpu",
+                    "host_name": "test-server",
+                    "status": 1,
+                    "details": {
+                        "warnings": ["cpu last warning"],
+                    }
+                },
+                {
+                    "name": "disk",
+                    "identifier": "disk:dddddddddddddddd",
+                    "host_name": "test-server",
+                    "status": 1,
+                    "details": {
+                        "warnings": ["disk last warning 1", "disk last warning 2"],
+                    }
+                },
+            ]
         )
 
     def test_put_summary_error1(self):
@@ -261,18 +288,24 @@ class TestCustomStatusCheck(TestCase):
                     }
                 }
             }),
-            {
-                "max": 2,
-                "host_name": "test-server",
-                "alerts": [
-                    {
-                        "level": 2,
-                        "item": "cpu",
-                        "identifier": "cpu",
-                        "details": "cpu last error"
-                    },
-                ],
-            },
+            [
+                {
+                    "name": "cpu",
+                    "identifier": "cpu",
+                    "host_name": "test-server",
+                    "status": 2,
+                    "details": {
+                        "error": "cpu last error",
+                    }
+                },
+                {
+                    "name": "disk",
+                    "identifier": "disk:dddddddddddddddd",
+                    "host_name": "test-server",
+                    "status": 0,
+                    "details": {},
+                },
+            ]
         )
 
     def test_put_summary_error2(self):
@@ -305,18 +338,24 @@ class TestCustomStatusCheck(TestCase):
                     }
                 }
             }),
-            {
-                "max": 2,
-                "host_name": "test-server",
-                "alerts": [
-                    {
-                        "level": 2,
-                        "item": "disk",
-                        "identifier": "disk:dddddddddddddddd",
-                        "details": "disk last error"
-                    },
-                ],
-            },
+            [
+                {
+                    "name": "cpu",
+                    "identifier": "cpu",
+                    "host_name": "test-server",
+                    "status": 0,
+                    "details": {},
+                },
+                {
+                    "name": "disk",
+                    "identifier": "disk:dddddddddddddddd",
+                    "host_name": "test-server",
+                    "status": 2,
+                    "details": {
+                        "error": "disk last error",
+                    }
+                },
+            ]
         )
 
     def test_put_summary_error3(self):
@@ -349,24 +388,26 @@ class TestCustomStatusCheck(TestCase):
                     }
                 }
             }),
-            {
-                "max": 2,
-                "host_name": "test-server",
-                "alerts": [
-                    {
-                        "level": 1,
-                        "item": "cpu",
-                        "identifier": "cpu",
-                        "details": ["cpu last warning"]
-                    },
-                    {
-                        "level": 2,
-                        "item": "disk",
-                        "identifier": "disk:dddddddddddddddd",
-                        "details": "disk last error"
-                    },
-                ],
-            },
+            [
+                {
+                    "name": "cpu",
+                    "identifier": "cpu",
+                    "host_name": "test-server",
+                    "status": 1,
+                    "details": {
+                        "warnings": ["cpu last warning"],
+                    }
+                },
+                {
+                    "name": "disk",
+                    "identifier": "disk:dddddddddddddddd",
+                    "host_name": "test-server",
+                    "status": 2,
+                    "details": {
+                        "error": "disk last error",
+                    }
+                },
+            ]
         )
 
     def test_put_summary_error4(self):
@@ -399,24 +440,25 @@ class TestCustomStatusCheck(TestCase):
                     }
                 }
             }),
-            {
-                "max": 2,
-                "host_name": "test-server",
-                "alerts": [
-                    {
-                        "level": 2,
-                        "item": "cpu",
-                        "identifier": "cpu",
-                        "details": "cpu last error"
-                    },
-                    {
-                        "level": 1,
-                        "item": "cpu",
-                        "identifier": "cpu",
-                        "details": ["cpu last warning"]
-                    },
-                ],
-            },
+            [
+                {
+                    "name": "cpu",
+                    "identifier": "cpu",
+                    "host_name": "test-server",
+                    "status": 2,
+                    "details": {
+                        "error": "cpu last error",
+                        "warnings": ["cpu last warning"],
+                    }
+                },
+                {
+                    "name": "disk",
+                    "identifier": "disk:dddddddddddddddd",
+                    "host_name": "test-server",
+                    "status": 0,
+                    "details": {},
+                },
+            ]
         )
 
     def test_put_summary_exception(self):
@@ -449,38 +491,13 @@ class TestCustomStatusCheck(TestCase):
                     }
                 }
             }),
-            {
-                "max": 3,
-                "host_name": "test-server",
-                "alerts": [
-                    {
-                        "level": 3,
-                        "item": "",
-                        "identifier": "",
-                        "details": "KeyError('LastWarnings')"
-                    },
-                ]
-            },
+            [
+                {
+                    "host_name": "test-server",
+                    "status": 3,
+                    "details": {
+                        "exception": "KeyError('LastWarnings')",
+                    }
+                }
+            ]
         )
-
-    # def test_get_items(self):
-    #     """ test get items """
-    #     self.assertEqual(
-    #         CustomStatusCheck().get_items({
-    #             "warnings": [
-    #                 {
-    #                     "item": "cpu",
-    #                     "identifier": "cpu",
-    #                     "last_warnings": ["cpu last warning"]
-    #                 },
-    #                 {
-    #                     "item": "disk",
-    #                     "identifier": "disk:dddddddddddddddd",
-    #                     "last_warnings": ["disk last warning"]
-    #                 },
-    #             ]
-    #         }),
-    #         [
-    #             "cpu", "disk"
-    #         ]
-    #     )
