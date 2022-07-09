@@ -16,7 +16,7 @@ import time
 from datadog_checks.base.utils.subprocess_output import get_subprocess_output
 
 # 特別な変数 __version__ の内容は Agent のステータスページに表示されます
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 
 
 class CustomStatusCheck(AgentCheck):
