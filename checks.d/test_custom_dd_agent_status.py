@@ -10,10 +10,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns ok """
         self.assertEqual(
             CustomStatusCheck().put_summary({
-                "apmStats": {
-                    "config": {
-                        "Hostname": "test-server"
-                    }
+                "hostinfo": {
+                    "hostname": "test-server"
+                },
+                "checkSchedulerStats": {
+                    "LoaderErrors" : {}
                 },
                 "runnerStats": {
                     "Checks": {
@@ -60,10 +61,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns warning variation """
         self.assertEqual(
             CustomStatusCheck().put_summary({
-                "apmStats": {
-                    "config": {
-                        "Hostname": "test-server"
-                    }
+                "hostinfo": {
+                    "hostname": "test-server"
+                },
+                "checkSchedulerStats": {
+                    "LoaderErrors" : {}
                 },
                 "runnerStats": {
                     "Checks": {
@@ -112,10 +114,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns warning variation """
         self.assertEqual(
             CustomStatusCheck().put_summary({
-                "apmStats": {
-                    "config": {
-                        "Hostname": "test-server"
-                    }
+                "hostinfo": {
+                    "hostname": "test-server"
+                },
+                "checkSchedulerStats": {
+                    "LoaderErrors" : {}
                 },
                 "runnerStats": {
                     "Checks": {
@@ -164,10 +167,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns warning variation """
         self.assertEqual(
             CustomStatusCheck().put_summary({
-                "apmStats": {
-                    "config": {
-                        "Hostname": "test-server"
-                    }
+                "hostinfo": {
+                    "hostname": "test-server"
+                },
+                "checkSchedulerStats": {
+                    "LoaderErrors" : {}
                 },
                 "runnerStats": {
                     "Checks": {
@@ -218,10 +222,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns warning variation """
         self.assertEqual(
             CustomStatusCheck().put_summary({
-                "apmStats": {
-                    "config": {
-                        "Hostname": "test-server"
-                    }
+                "hostinfo": {
+                    "hostname": "test-server"
+                },
+                "checkSchedulerStats": {
+                    "LoaderErrors" : {}
                 },
                 "runnerStats": {
                     "Checks": {
@@ -272,10 +277,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns error variation """
         self.assertEqual(
             CustomStatusCheck().put_summary({
-                "apmStats": {
-                    "config": {
-                        "Hostname": "test-server"
-                    }
+                "hostinfo": {
+                    "hostname": "test-server"
+                },
+                "checkSchedulerStats": {
+                    "LoaderErrors" : {}
                 },
                 "runnerStats": {
                     "Checks": {
@@ -324,10 +330,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns error variation """
         self.assertEqual(
             CustomStatusCheck().put_summary({
-                "apmStats": {
-                    "config": {
-                        "Hostname": "test-server"
-                    }
+                "hostinfo": {
+                    "hostname": "test-server"
+                },
+                "checkSchedulerStats": {
+                    "LoaderErrors" : {}
                 },
                 "runnerStats": {
                     "Checks": {
@@ -376,10 +383,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns error variation """
         self.assertEqual(
             CustomStatusCheck().put_summary({
-                "apmStats": {
-                    "config": {
-                        "Hostname": "test-server"
-                    }
+                "hostinfo": {
+                    "hostname": "test-server"
+                },
+                "checkSchedulerStats": {
+                    "LoaderErrors" : {}
                 },
                 "runnerStats": {
                     "Checks": {
@@ -430,10 +438,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns error variation """
         self.assertEqual(
             CustomStatusCheck().put_summary({
-                "apmStats": {
-                    "config": {
-                        "Hostname": "test-server"
-                    }
+                "hostinfo": {
+                    "hostname": "test-server"
+                },
+                "checkSchedulerStats": {
+                    "LoaderErrors" : {}
                 },
                 "runnerStats": {
                     "Checks": {
@@ -483,10 +492,11 @@ class TestCustomStatusCheck(TestCase):
         """ test returns exception """
         self.assertEqual(
             CustomStatusCheck().put_summary({
-                "apmStats": {
-                    "config": {
-                        "Hostname": "test-server"
-                    }
+                "hostinfo": {
+                    "hostname": "test-server"
+                },
+                "checkSchedulerStats": {
+                    "LoaderErrors" : {}
                 },
                 "runnerStats": {
                     "Checks": {
@@ -520,6 +530,69 @@ class TestCustomStatusCheck(TestCase):
                             "exception": "KeyError('LastWarnings')",
                         }
                     }
+                ]
+            }
+        )
+
+    def test_put_summary_loader_error(self):
+        """ test returns loader_error """
+        self.assertEqual(
+            CustomStatusCheck().put_summary({
+                "hostinfo": {
+                    "hostname": "test-server"
+                },
+                "checkSchedulerStats": {
+                    "LoaderErrors" : {
+                        "custom_hello": {}
+                    }
+                },
+                "runnerStats": {
+                    "Checks": {
+                        "cpu": {
+                            "cpu": {
+                                "TotalErrors": 0,
+                                "LastError": "",
+                                "TotalWarnings": 0,
+                                "LastWarnings": [],
+                            }
+                        },
+                        "disk": {
+                            "disk:dddddddddddddddd": {
+                                "TotalErrors": 0,
+                                "LastError": "",
+                                "TotalWarnings": 0,
+                                "LastWarnings": [],
+                            }
+                        },
+                    }
+                }
+            }),
+            {
+                "status_max": 1,
+                "host_name": "test-server",
+                "summaries": [
+                    {
+                        "name": "LoaderErrors",
+                        "identifier": "",
+                        "status": 1,
+                        "details": {
+                            "loaderErrors": {
+                                "custom_hello": {}
+                            }
+                        }
+                    },
+                    {
+                        "name": "cpu",
+                        "identifier": "cpu",
+                        "status": 0,
+                        "details": {},
+                    },
+                    {
+                        "name": "disk",
+                        "identifier": "disk:dddddddddddddddd",
+                        "status": 0,
+                        "details": {},
+                    },
                 ]
             }
         )

@@ -16,7 +16,7 @@ import time
 from datadog_checks.base.utils.subprocess_output import get_subprocess_output
 
 # 特別な変数 __version__ の内容は Agent のステータスページに表示されます
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 
 
 class CustomStatusCheck(AgentCheck):
@@ -52,7 +52,18 @@ class CustomStatusCheck(AgentCheck):
         status_max = self.OK
 
         try:
-            host = agent_status_data["apmStats"]["config"]["Hostname"]
+            host = agent_status_data["hostinfo"]["hostname"]
+
+            loader_status_data = agent_status_data["checkSchedulerStats"]["LoaderErrors"]
+            if len(loader_status_data) > 0:
+                status_max = self.WARN_EXIST
+                summary = {}
+                summary["name"] = "LoaderErrors"
+                summary["identifier"] = ""
+                summary["status"] = self.WARN_EXIST
+                summary["details"] = {}
+                summary["details"]["loaderErrors"] = loader_status_data
+                summaries.append(summary)
 
             checks = agent_status_data["runnerStats"]["Checks"]
             for check_name, check_results in checks.items():
@@ -80,7 +91,7 @@ class CustomStatusCheck(AgentCheck):
             status_max = self.EXCEPTION_OCCUR
             summary = {}
             summary["status"] = self.EXCEPTION_OCCUR
-            summary["host_name"] = agent_status_data["apmStats"]["config"]["Hostname"]
+            summary["host_name"] = agent_status_data["hostinfo"]["hostname"]
             summary["details"] = {}
             summary["details"]["exception"] = repr(ex_key)
             summaries.append(summary)
