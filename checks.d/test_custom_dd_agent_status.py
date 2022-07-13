@@ -38,9 +38,14 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "status_max": 0,
                 "host_name": "test-server",
                 "summaries": [
+                    {
+                        "name": "LoaderErrors",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
+                    },
                     {
                         "name": "cpu",
                         "identifier": "cpu",
@@ -52,6 +57,12 @@ class TestCustomStatusCheck(TestCase):
                         "identifier": "disk:dddddddddddddddd",
                         "status": 0,
                         "details": {},
+                    },
+                    {
+                        "name": "KeyError",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
                     },
                 ],
             }
@@ -89,9 +100,14 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "status_max": 1,
                 "host_name": "test-server",
                 "summaries": [
+                    {
+                        "name": "LoaderErrors",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
+                    },
                     {
                         "name": "cpu",
                         "identifier": "cpu",
@@ -105,6 +121,12 @@ class TestCustomStatusCheck(TestCase):
                         "identifier": "disk:dddddddddddddddd",
                         "status": 0,
                         "details": {},
+                    },
+                    {
+                        "name": "KeyError",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
                     },
                 ]
             }
@@ -142,9 +164,14 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "status_max": 1,
                 "host_name": "test-server",
                 "summaries": [
+                    {
+                        "name": "LoaderErrors",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
+                    },
                     {
                         "name": "cpu",
                         "identifier": "cpu",
@@ -158,6 +185,12 @@ class TestCustomStatusCheck(TestCase):
                         "details": {
                             "warnings": ["disk last warning"],
                         }
+                    },
+                    {
+                        "name": "KeyError",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
                     },
                 ]
             }
@@ -195,9 +228,14 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "status_max": 1,
                 "host_name": "test-server",
                 "summaries": [
+                    {
+                        "name": "LoaderErrors",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
+                    },
                     {
                         "name": "cpu",
                         "identifier": "cpu",
@@ -213,6 +251,12 @@ class TestCustomStatusCheck(TestCase):
                         "details": {
                             "warnings": ["disk last warning"],
                         }
+                    },
+                    {
+                        "name": "KeyError",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
                     },
                 ]
             }
@@ -250,9 +294,14 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "status_max": 1,
                 "host_name": "test-server",
                 "summaries": [
+                    {
+                        "name": "LoaderErrors",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
+                    },
                     {
                         "name": "cpu",
                         "identifier": "cpu",
@@ -268,6 +317,12 @@ class TestCustomStatusCheck(TestCase):
                         "details": {
                             "warnings": ["disk last warning 1", "disk last warning 2"],
                         }
+                    },
+                    {
+                        "name": "KeyError",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
                     },
                 ]
             }
@@ -305,9 +360,14 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "status_max": 2,
                 "host_name": "test-server",
                 "summaries": [
+                    {
+                        "name": "LoaderErrors",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
+                    },
                     {
                         "name": "cpu",
                         "identifier": "cpu",
@@ -321,6 +381,12 @@ class TestCustomStatusCheck(TestCase):
                         "identifier": "disk:dddddddddddddddd",
                         "status": 0,
                         "details": {},
+                    },
+                    {
+                        "name": "KeyError",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
                     },
                 ]
             }
@@ -358,9 +424,14 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "status_max": 2,
                 "host_name": "test-server",
                 "summaries": [
+                    {
+                        "name": "LoaderErrors",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
+                    },
                     {
                         "name": "cpu",
                         "identifier": "cpu",
@@ -374,6 +445,12 @@ class TestCustomStatusCheck(TestCase):
                         "details": {
                             "error": "disk last error",
                         }
+                    },
+                    {
+                        "name": "KeyError",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
                     },
                 ]
             }
@@ -411,9 +488,14 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "status_max": 2,
                 "host_name": "test-server",
                 "summaries": [
+                    {
+                        "name": "LoaderErrors",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
+                    },
                     {
                         "name": "cpu",
                         "identifier": "cpu",
@@ -429,6 +511,12 @@ class TestCustomStatusCheck(TestCase):
                         "details": {
                             "error": "disk last error",
                         }
+                    },
+                    {
+                        "name": "KeyError",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
                     },
                 ]
             }
@@ -466,9 +554,14 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "status_max": 2,
                 "host_name": "test-server",
                 "summaries": [
+                    {
+                        "name": "LoaderErrors",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
+                    },
                     {
                         "name": "cpu",
                         "identifier": "cpu",
@@ -483,6 +576,12 @@ class TestCustomStatusCheck(TestCase):
                         "identifier": "disk:dddddddddddddddd",
                         "status": 0,
                         "details": {},
+                    },
+                    {
+                        "name": "KeyError",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
                     },
                 ]
             }
@@ -520,11 +619,17 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "status_max": 3,
                 "host_name": "test-server",
                 "summaries": [
                     {
-                        "host_name": "test-server",
+                        "name": "LoaderErrors",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
+                    },
+                    {
+                        "name": "KeyError",
+                        "identifier": "",
                         "status": 3,
                         "details": {
                             "exception": "KeyError('LastWarnings')",
@@ -568,7 +673,6 @@ class TestCustomStatusCheck(TestCase):
                 }
             }),
             {
-                "status_max": 1,
                 "host_name": "test-server",
                 "summaries": [
                     {
@@ -593,6 +697,12 @@ class TestCustomStatusCheck(TestCase):
                         "status": 0,
                         "details": {},
                     },
+                    {
+                        "name": "KeyError",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
+                    }
                 ]
             }
         )

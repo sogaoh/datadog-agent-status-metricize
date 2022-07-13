@@ -16,7 +16,7 @@ import time
 from datadog_checks.base.utils.subprocess_output import get_subprocess_output
 
 # 特別な変数 __version__ の内容は Agent のステータスページに表示されます
-__version__ = "1.3.0"
+__version__ = "1.3.1"
 
 
 class CustomStatusCheck(AgentCheck):
@@ -49,20 +49,25 @@ class CustomStatusCheck(AgentCheck):
     def put_summary(self, agent_status_data):
         """ put_summary """
         summaries = []
-        status_max = self.OK
 
         try:
             host = agent_status_data["hostinfo"]["hostname"]
 
             loader_status_data = agent_status_data["checkSchedulerStats"]["LoaderErrors"]
             if len(loader_status_data) > 0:
-                status_max = self.WARN_EXIST
                 summary = {}
                 summary["name"] = "LoaderErrors"
                 summary["identifier"] = ""
                 summary["status"] = self.WARN_EXIST
                 summary["details"] = {}
                 summary["details"]["loaderErrors"] = loader_status_data
+                summaries.append(summary)
+            else:
+                summary = {}
+                summary["name"] = "LoaderErrors"
+                summary["identifier"] = ""
+                summary["status"] = self.OK
+                summary["details"] = {}
                 summaries.append(summary)
 
             checks = agent_status_data["runnerStats"]["Checks"]
@@ -74,31 +79,36 @@ class CustomStatusCheck(AgentCheck):
                     for key, value in check_values.items():
                         if key == "TotalErrors":
                             if value > 0:
-                                status_max = self.ERROR_EXIST
                                 summary["status"] = self.ERROR_EXIST
                                 summary["details"]["error"] = check_values["LastError"]
-                        elif key == "TotalWarnings":
+                        if key == "TotalWarnings":
                             if value > 0:
-                                if status_max != self.ERROR_EXIST:
-                                    status_max = self.WARN_EXIST
                                 if summary["status"] != self.ERROR_EXIST:
                                     summary["status"] = self.WARN_EXIST
                                 summary["details"]["warnings"] = check_values["LastWarnings"]
                     summary["identifier"] = check_id
                 summary["name"] = check_name
                 summaries.append(summary)
-        except KeyError as ex_key:
-            status_max = self.EXCEPTION_OCCUR
+
             summary = {}
+            summary["name"] = "KeyError"
+            summary["identifier"] = ""
+            summary["status"] = self.OK
+            summary["details"] = {}
+            summaries.append(summary)
+
+        except KeyError as ex_key:
+            summary = {}
+            summary["name"] = "KeyError"
+            summary["identifier"] = ""
             summary["status"] = self.EXCEPTION_OCCUR
-            summary["host_name"] = agent_status_data["hostinfo"]["hostname"]
             summary["details"] = {}
             summary["details"]["exception"] = repr(ex_key)
             summaries.append(summary)
 
         if self.DEBUG:
-            print(f"DEBUG: max={status_max}, summaries={summaries}")
-        return {"summaries": summaries, "status_max": status_max, "host_name": host}
+            print(f"DEBUG: summaries={summaries}")
+        return {"summaries": summaries, "host_name": host}
 
     def check(self, instance):
         """ check """
