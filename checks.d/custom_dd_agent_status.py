@@ -16,7 +16,7 @@ import time
 from datadog_checks.base.utils.subprocess_output import get_subprocess_output
 
 # 特別な変数 __version__ の内容は Agent のステータスページに表示されます
-__version__ = "1.2.1"
+__version__ = "1.3.0"
 
 
 class CustomStatusCheck(AgentCheck):
@@ -106,19 +106,13 @@ class CustomStatusCheck(AgentCheck):
         status_summary_data = self.put_summary(agent_status_data)
 
         host = status_summary_data["host_name"]
-        self.gauge(
-            "custom_dd_agent_check.status_max",
-            status_summary_data["status_max"],
-            tags=[] + self.instance.get('tags', []),
-            hostname=host
-        )
-        time.sleep(2)
         for status_summary_datum in status_summary_data["summaries"]:
             self.gauge(
-                f"custom_dd_agent_check.{status_summary_datum['name']}.status",
+                "custom_dd_agent_check.health",
                 status_summary_datum["status"],
-                tags=[f"identifier:{status_summary_datum['identifier']}"] +
-                    self.instance.get('tags', []),
+                tags=[
+                        f"plugin_name:{status_summary_datum['name']}",
+                    ] + self.instance.get('tags', []),
                 hostname=host
             )
             #time.sleep(2)
