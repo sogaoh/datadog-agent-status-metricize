@@ -75,7 +75,7 @@ env PYTHONPATH=. DEBUG=1 .venv/bin/python3 -m unittest test_custom_dd_agent_stat
 
 ## Monitor example
 
-- Define the metric: `avg:custom_dd_agent_check.health{plugin_name:*} by {plugin_name}`
+- Define the metric: `avg:custom_dd_agent_check.health{plugin_name:*} by {host, plugin_name}`
 
 - Notify your team:   
     `[{{plugin_name}}] status is NOT healthy on [{{host}}]`
