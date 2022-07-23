@@ -42,7 +42,7 @@ class TestCustomStatusCheck(TestCase):
                 "summaries": [
                     {
                         "name": "LoaderErrors",
-                        "identifier": "",
+                        "identifier": "LoaderErrors",
                         "status": 0,
                         "details": {}
                     },
@@ -98,7 +98,7 @@ class TestCustomStatusCheck(TestCase):
                 "summaries": [
                     {
                         "name": "LoaderErrors",
-                        "identifier": "",
+                        "identifier": "LoaderErrors",
                         "status": 0,
                         "details": {}
                     },
@@ -156,7 +156,7 @@ class TestCustomStatusCheck(TestCase):
                 "summaries": [
                     {
                         "name": "LoaderErrors",
-                        "identifier": "",
+                        "identifier": "LoaderErrors",
                         "status": 0,
                         "details": {}
                     },
@@ -214,7 +214,7 @@ class TestCustomStatusCheck(TestCase):
                 "summaries": [
                     {
                         "name": "LoaderErrors",
-                        "identifier": "",
+                        "identifier": "LoaderErrors",
                         "status": 0,
                         "details": {}
                     },
@@ -274,7 +274,7 @@ class TestCustomStatusCheck(TestCase):
                 "summaries": [
                     {
                         "name": "LoaderErrors",
-                        "identifier": "",
+                        "identifier": "LoaderErrors",
                         "status": 0,
                         "details": {}
                     },
@@ -334,7 +334,7 @@ class TestCustomStatusCheck(TestCase):
                 "summaries": [
                     {
                         "name": "LoaderErrors",
-                        "identifier": "",
+                        "identifier": "LoaderErrors",
                         "status": 0,
                         "details": {}
                     },
@@ -392,7 +392,7 @@ class TestCustomStatusCheck(TestCase):
                 "summaries": [
                     {
                         "name": "LoaderErrors",
-                        "identifier": "",
+                        "identifier": "LoaderErrors",
                         "status": 0,
                         "details": {}
                     },
@@ -450,7 +450,7 @@ class TestCustomStatusCheck(TestCase):
                 "summaries": [
                     {
                         "name": "LoaderErrors",
-                        "identifier": "",
+                        "identifier": "LoaderErrors",
                         "status": 0,
                         "details": {}
                     },
@@ -510,7 +510,7 @@ class TestCustomStatusCheck(TestCase):
                 "summaries": [
                     {
                         "name": "LoaderErrors",
-                        "identifier": "",
+                        "identifier": "LoaderErrors",
                         "status": 0,
                         "details": {}
                     },
@@ -569,7 +569,7 @@ class TestCustomStatusCheck(TestCase):
                 "summaries": [
                     {
                         "name": "LoaderErrors",
-                        "identifier": "",
+                        "identifier": "LoaderErrors",
                         "status": 0,
                         "details": {}
                     },
@@ -627,7 +627,7 @@ class TestCustomStatusCheck(TestCase):
                 "summaries": [
                     {
                         "name": "LoaderErrors",
-                        "identifier": "",
+                        "identifier": "LoaderErrors",
                         "status": 0,
                         "details": {}
                     },
@@ -681,7 +681,7 @@ class TestCustomStatusCheck(TestCase):
                 "summaries": [
                     {
                         "name": "LoaderErrors",
-                        "identifier": "",
+                        "identifier": "LoaderErrors",
                         "status": 1,
                         "details": {
                             "loaderErrors": {

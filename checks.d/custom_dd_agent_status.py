@@ -57,7 +57,7 @@ class CustomStatusCheck(AgentCheck):
             if len(loader_status_data) > 0:
                 summary = {}
                 summary["name"] = "LoaderErrors"
-                summary["identifier"] = ""
+                summary["identifier"] = "LoaderErrors"
                 summary["status"] = self.WARN_EXIST
                 summary["details"] = {}
                 summary["details"]["loaderErrors"] = loader_status_data
@@ -65,7 +65,7 @@ class CustomStatusCheck(AgentCheck):
             else:
                 summary = {}
                 summary["name"] = "LoaderErrors"
-                summary["identifier"] = ""
+                summary["identifier"] = "LoaderErrors"
                 summary["status"] = self.OK
                 summary["details"] = {}
                 summaries.append(summary)
