@@ -58,12 +58,6 @@ class TestCustomStatusCheck(TestCase):
                         "status": 0,
                         "details": {},
                     },
-                    {
-                        "name": "KeyError",
-                        "identifier": "",
-                        "status": 0,
-                        "details": {}
-                    },
                 ],
             }
         )
@@ -122,12 +116,6 @@ class TestCustomStatusCheck(TestCase):
                         "status": 0,
                         "details": {},
                     },
-                    {
-                        "name": "KeyError",
-                        "identifier": "",
-                        "status": 0,
-                        "details": {}
-                    },
                 ]
             }
         )
@@ -185,12 +173,6 @@ class TestCustomStatusCheck(TestCase):
                         "details": {
                             "warnings": ["disk last warning"],
                         }
-                    },
-                    {
-                        "name": "KeyError",
-                        "identifier": "",
-                        "status": 0,
-                        "details": {}
                     },
                 ]
             }
@@ -252,12 +234,6 @@ class TestCustomStatusCheck(TestCase):
                             "warnings": ["disk last warning"],
                         }
                     },
-                    {
-                        "name": "KeyError",
-                        "identifier": "",
-                        "status": 0,
-                        "details": {}
-                    },
                 ]
             }
         )
@@ -318,12 +294,6 @@ class TestCustomStatusCheck(TestCase):
                             "warnings": ["disk last warning 1", "disk last warning 2"],
                         }
                     },
-                    {
-                        "name": "KeyError",
-                        "identifier": "",
-                        "status": 0,
-                        "details": {}
-                    },
                 ]
             }
         )
@@ -382,12 +352,6 @@ class TestCustomStatusCheck(TestCase):
                         "status": 0,
                         "details": {},
                     },
-                    {
-                        "name": "KeyError",
-                        "identifier": "",
-                        "status": 0,
-                        "details": {}
-                    },
                 ]
             }
         )
@@ -445,12 +409,6 @@ class TestCustomStatusCheck(TestCase):
                         "details": {
                             "error": "disk last error",
                         }
-                    },
-                    {
-                        "name": "KeyError",
-                        "identifier": "",
-                        "status": 0,
-                        "details": {}
                     },
                 ]
             }
@@ -512,12 +470,6 @@ class TestCustomStatusCheck(TestCase):
                             "error": "disk last error",
                         }
                     },
-                    {
-                        "name": "KeyError",
-                        "identifier": "",
-                        "status": 0,
-                        "details": {}
-                    },
                 ]
             }
         )
@@ -577,12 +529,6 @@ class TestCustomStatusCheck(TestCase):
                         "status": 0,
                         "details": {},
                     },
-                    {
-                        "name": "KeyError",
-                        "identifier": "",
-                        "status": 0,
-                        "details": {}
-                    },
                 ]
             }
         )
@@ -628,13 +574,71 @@ class TestCustomStatusCheck(TestCase):
                         "details": {}
                     },
                     {
-                        "name": "KeyError",
-                        "identifier": "",
+                        "name": "custom_dd_agent_status",
+                        "identifier": "KeyError on: cpu",
                         "status": 3,
                         "details": {
                             "exception": "KeyError('LastWarnings')",
                         }
+                    },
+                    {
+                        "name": "disk",
+                        "identifier": "disk:dddddddddddddddd",
+                        "status": 0,
+                        "details": {},
+                    },
+                ]
+            }
+        )
+
+    def test_put_summary_exception2(self):
+        """ test returns exception """
+        self.assertEqual(
+            CustomStatusCheck().put_summary({
+                "hostinfo": {
+                    "hostname": "test-server"
+                },
+                "checkSchedulerStats": {
+                    "LoaderErrors" : {}
+                },
+                "runnerStats": {
+                    "ChecksXXX": {  # caused exception
+                        "cpu": {
+                            "cpu": {
+                                "TotalErrors": 0,
+                                "LastError": "",
+                                "TotalWarnings": 1,
+                                "LastWarnings": [],
+                            }
+                        },
+                        "disk": {
+                            "disk:dddddddddddddddd": {
+                                "TotalErrors": 0,
+                                "LastError": "",
+                                "TotalWarnings": 0,
+                                "LastWarnings": [],
+                            }
+                        },
                     }
+                }
+            }),
+            {
+                "host_name": "test-server",
+                "summaries": [
+                    {
+                        "name": "LoaderErrors",
+                        "identifier": "",
+                        "status": 0,
+                        "details": {}
+                    },
+                    {
+                        "name": "custom_dd_agent_status",
+                        "identifier": "Unexpected Response",
+                        "status": 3,
+                        "details": {
+                            "exception": "KeyError('Checks')",
+                        }
+                    },
                 ]
             }
         )
@@ -697,12 +701,6 @@ class TestCustomStatusCheck(TestCase):
                         "status": 0,
                         "details": {},
                     },
-                    {
-                        "name": "KeyError",
-                        "identifier": "",
-                        "status": 0,
-                        "details": {}
-                    }
                 ]
             }
         )

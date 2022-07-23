@@ -16,7 +16,7 @@ import time
 from datadog_checks.base.utils.subprocess_output import get_subprocess_output
 
 # 特別な変数 __version__ の内容は Agent のステータスページに表示されます
-__version__ = "1.3.1"
+__version__ = "1.4.0"
 
 
 class CustomStatusCheck(AgentCheck):
@@ -75,35 +75,39 @@ class CustomStatusCheck(AgentCheck):
                 summary = {}
                 summary["status"] = self.OK
                 summary["details"] = {}
-                for check_id, check_values in check_results.items():
-                    for key, value in check_values.items():
-                        if key == "TotalErrors":
-                            if value > 0:
-                                summary["status"] = self.ERROR_EXIST
-                                summary["details"]["error"] = check_values["LastError"]
-                        if key == "TotalWarnings":
-                            if value > 0:
-                                if summary["status"] != self.ERROR_EXIST:
-                                    summary["status"] = self.WARN_EXIST
-                                summary["details"]["warnings"] = check_values["LastWarnings"]
-                    summary["identifier"] = check_id
-                summary["name"] = check_name
-                summaries.append(summary)
+                try:
+                    for check_id, check_values in check_results.items():
+                        for key, value in check_values.items():
+                            if key == "TotalErrors":
+                                if value > 0:
+                                    summary["status"] = self.ERROR_EXIST
+                                    summary["details"]["error"] = check_values["LastError"]
+                            if key == "TotalWarnings":
+                                if value > 0:
+                                    if summary["status"] != self.ERROR_EXIST:
+                                        summary["status"] = self.WARN_EXIST
+                                    summary["details"]["warnings"] = check_values["LastWarnings"]
+                        summary["identifier"] = check_id
+                    summary["name"] = check_name
+                    summaries.append(summary)
+                except KeyError as ex_key:
+                    summary = {}
+                    summary["name"] = "custom_dd_agent_status"
+                    summary["identifier"] = f"KeyError on: {check_name}"
+                    summary["status"] = self.EXCEPTION_OCCUR
+                    summary["details"] = {}
+                    summary["details"]["exception"] = repr(ex_key)
+                    summaries.append(summary)
+                finally:
+                    pass
 
+        except Exception as ex:
             summary = {}
-            summary["name"] = "KeyError"
-            summary["identifier"] = ""
-            summary["status"] = self.OK
-            summary["details"] = {}
-            summaries.append(summary)
-
-        except KeyError as ex_key:
-            summary = {}
-            summary["name"] = "KeyError"
-            summary["identifier"] = ""
+            summary["name"] = "custom_dd_agent_status"
+            summary["identifier"] = "Unexpected Response"
             summary["status"] = self.EXCEPTION_OCCUR
             summary["details"] = {}
-            summary["details"]["exception"] = repr(ex_key)
+            summary["details"]["exception"] = repr(ex)
             summaries.append(summary)
 
         if self.DEBUG:
@@ -122,6 +126,7 @@ class CustomStatusCheck(AgentCheck):
                 status_summary_datum["status"],
                 tags=[
                         f"plugin_name:{status_summary_datum['name']}",
+                        f"identifier:{status_summary_datum['identifier']}",
                     ] + self.instance.get('tags', []),
                 hostname=host
             )
