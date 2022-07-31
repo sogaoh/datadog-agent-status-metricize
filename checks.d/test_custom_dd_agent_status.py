@@ -549,8 +549,8 @@ class TestCustomStatusCheck(TestCase):
                             "cpu": {
                                 "TotalErrors": 0,
                                 "LastError": "",
-                                "TotalWarnings": 1,
-                                # "LastWarnings": [],  # caused exception
+                                "TotalWarnings": 0,
+                                "LastWarningsX": [],  # caused exception
                             }
                         },
                         "disk": {
@@ -694,6 +694,118 @@ class TestCustomStatusCheck(TestCase):
                         "identifier": "cpu",
                         "status": 0,
                         "details": {},
+                    },
+                    {
+                        "name": "disk",
+                        "identifier": "disk:dddddddddddddddd",
+                        "status": 0,
+                        "details": {},
+                    },
+                ]
+            }
+        )
+
+    def test_put_summary_no_old_error(self):
+        """ test returns ok (ignore old error) """
+        self.assertEqual(
+            CustomStatusCheck().put_summary({
+                "hostinfo": {
+                    "hostname": "test-server"
+                },
+                "checkSchedulerStats": {
+                    "LoaderErrors" : {}
+                },
+                "runnerStats": {
+                    "Checks": {
+                        "cpu": {
+                            "cpu": {
+                                "TotalErrors": 2,
+                                "LastError": "",
+                                "TotalWarnings": 0,
+                                "LastWarnings": [],
+                            }
+                        },
+                        "disk": {
+                            "disk:dddddddddddddddd": {
+                                "TotalErrors": 0,
+                                "LastError": "",
+                                "TotalWarnings": 0,
+                                "LastWarnings": [],
+                            }
+                        },
+                    }
+                }
+            }),
+            {
+                "host_name": "test-server",
+                "summaries": [
+                    {
+                        "name": "LoaderErrors",
+                        "identifier": "LoaderErrors",
+                        "status": 0,
+                        "details": {}
+                    },
+                    {
+                        "name": "cpu",
+                        "identifier": "cpu",
+                        "status": 0,
+                        "details": {}
+                    },
+                    {
+                        "name": "disk",
+                        "identifier": "disk:dddddddddddddddd",
+                        "status": 0,
+                        "details": {},
+                    },
+                ]
+            }
+        )
+
+    def test_put_summary_no_old_warnings(self):
+        """ test returns ok (ignore old warnings) """
+        self.assertEqual(
+            CustomStatusCheck().put_summary({
+                "hostinfo": {
+                    "hostname": "test-server"
+                },
+                "checkSchedulerStats": {
+                    "LoaderErrors" : {}
+                },
+                "runnerStats": {
+                    "Checks": {
+                        "cpu": {
+                            "cpu": {
+                                "TotalErrors": 0,
+                                "LastError": "",
+                                "TotalWarnings": 0,
+                                "LastWarnings": [],
+                            }
+                        },
+                        "disk": {
+                            "disk:dddddddddddddddd": {
+                                "TotalErrors": 0,
+                                "LastError": "",
+                                "TotalWarnings": 2,
+                                "LastWarnings": [],
+                            }
+                        },
+                    }
+                }
+            }),
+            {
+                "host_name": "test-server",
+                "summaries": [
+                    {
+                        "name": "LoaderErrors",
+                        "identifier": "LoaderErrors",
+                        "status": 0,
+                        "details": {}
+                    },
+                    {
+                        "name": "cpu",
+                        "identifier": "cpu",
+                        "status": 0,
+                        "details": {}
                     },
                     {
                         "name": "disk",

@@ -16,7 +16,7 @@ import time
 from datadog_checks.base.utils.subprocess_output import get_subprocess_output
 
 # 特別な変数 __version__ の内容は Agent のステータスページに表示されます
-__version__ = "1.4.0"
+__version__ = "1.5.0"
 
 
 class CustomStatusCheck(AgentCheck):
@@ -77,13 +77,19 @@ class CustomStatusCheck(AgentCheck):
                 summary["details"] = {}
                 try:
                     for check_id, check_values in check_results.items():
+                        #if self.DEBUG:
+                        #    print(f"DEBUG: check_values={check_values}")
+                        if "LastError" not in check_values:
+                            raise KeyError("LastError")
+                        if "LastWarnings" not in check_values:
+                            raise KeyError("LastWarnings")
                         for key, value in check_values.items():
-                            if key == "TotalErrors":
-                                if value > 0:
+                            if key == "LastError":
+                                if value != "":
                                     summary["status"] = self.ERROR_EXIST
                                     summary["details"]["error"] = check_values["LastError"]
-                            if key == "TotalWarnings":
-                                if value > 0:
+                            if key == "LastWarnings":
+                                if len(value) > 0:
                                     if summary["status"] != self.ERROR_EXIST:
                                         summary["status"] = self.WARN_EXIST
                                     summary["details"]["warnings"] = check_values["LastWarnings"]
